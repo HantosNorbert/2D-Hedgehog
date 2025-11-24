@@ -1,0 +1,4 @@
+# For the Hedgehog 2D application
+pygame
+# For tile image creation script
+pillow
