@@ -41,19 +41,13 @@ The animation is done in a way that shows a smooth transition and rotation of th
 ### Links and references
 
 - Burkard Polster: "How to build and solve a 4D Rubik's cube in physical 3D (no simulator!)" [https://www.youtube.com/watch?v=d-Yy-ILjM3k](https://www.youtube.com/watch?v=d-Yy-ILjM3k)
-
 - Melinda Green's physical 2x2x2x2 Rubik's Cube [https://superliminal.com/cube/2x2x2x2/](https://superliminal.com/cube/2x2x2x2/)
-
 - Burkard Polster's Hedgehog simulator (no animation) [https://www.qedcat.com/2x2x2x2%20hedgehog/](https://www.qedcat.com/2x2x2x2%20hedgehog/)
-
 - Ed Collen's Hedgehog simulator [https://2x2x2x2.vercel.app/cube](https://2x2x2x2.vercel.app/cube)
-
 - Mitchell Manning's Hedgehog simulator [https://rebelkeithy.github.io/TheHedgehog/](https://rebelkeithy.github.io/TheHedgehog/)
-
 - Dimension Reduction Ortega, a tutorial written by myself on how to solve the 4-dimensional physical 2x2x2x2 cube [https://github.com/HantosNorbert/Dimension-Reduction-Ortega](https://github.com/HantosNorbert/Dimension-Reduction-Ortega)
-
 - Hypercubing: the hobby of solving twisty puzzles in higher dimensions [https://hypercubing.xyz/](https://hypercubing.xyz/)
-
+- Bartosz Ciechanowski's introduction to the Tesseract, the 4-dimensional hypercube [https://ciechanow.ski/tesseract/](https://ciechanow.ski/tesseract/)
 - `pygbag`, the Python Web Assembly [https://github.com/pygame-web/pygbag](https://github.com/pygame-web/pygbag)
 
 Norbert Hantos, 2025.11.24.
