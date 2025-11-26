@@ -1,4 +1,5 @@
-from constants import *
+from constants import WINDOW_WIDTH, STICKER_COLORS, STICKER_POSITIONS
+from constants import MODEL_STICKER_ORIGIN_SIZE, MODEL_STICKER_TARGET_SIZE, MODEL_3D_TOP_MARGIN
 
 import pygame
 

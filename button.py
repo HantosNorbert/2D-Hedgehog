@@ -1,4 +1,4 @@
-from constants import *
+from constants import GRAY_COLOR, WHITE_COLOR
 
 import pygame
 

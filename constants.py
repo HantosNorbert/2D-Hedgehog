@@ -2,10 +2,9 @@
 # TILES
 #############################################
 TILE_SIZE = 170    # hedgehog tile size in pixel
-TILE_MARGIN = 25   # hedgehog margin size around the tiles in pixel
 ROWS, COLS = 2, 4  # hedgehog grid size
 
-TILE_POSITION_ADJUSTMENT = 30  # bring the tiles closer to the center by this amount in pixel
+TILE_POSITION_ADJUSTMENT = 65  # bring the tiles closer to the center by this amount in pixel
 
 TRANSLATION_TOLERANCE = 3  # tolerance in pixel for snapping tiles to their target positions
 ROTATION_TOLERANCE = 0.05  # tolerance in degrees for snapping tiles to their target angles
@@ -13,23 +12,30 @@ ROTATION_TOLERANCE = 0.05  # tolerance in degrees for snapping tiles to their ta
 #############################################
 # MAIN WINDOW
 #############################################
-EXTRA_WINDOW_HEIGHT_FOR_3D = 300  # leave this amount of extra space below the tiles for the 3D rendering
-WINDOW_WIDTH = COLS * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN
-WINDOW_HEIGHT = ROWS * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN + EXTRA_WINDOW_HEIGHT_FOR_3D
-
-print(WINDOW_WIDTH, WINDOW_HEIGHT)
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 700
 
 FPS = 60  # animation FPS
 BACKGROUND_COLOR = (68, 68, 68)
+SHADOW_OFFSET = 3  # shadow offset in pixels for texts and slider
+
+#############################################
+# SLIDER
+#############################################
+SLIDER_X = 530
+SLIDER_Y = WINDOW_HEIGHT - 85
+SLIDER_WIDTH = 250
+SLIDER_TEXT_POS = (SLIDER_X + 80, SLIDER_Y - 50)
 
 #############################################
 # COLORS
 #############################################
-# For buttons
+# For buttons and slider
 GRAY_COLOR = (100, 100, 100)
 PURPLE_COLOR = (138, 43, 226)
 BLUE_COLOR = (70, 130, 180)
 PINK_COLOR = (255, 0, 255)
+LIGHT_GRAY_COLOR = (200, 200, 200)
 DARK_GRAY_COLOR = (30, 30, 30)
 WHITE_COLOR = (255, 255, 255)
 BLACK_COLOR = (0, 0, 0)
@@ -45,27 +51,36 @@ D_SIDE_STICKER_COLOR = (255, 255, 0)    # yellow
 #############################################
 # TURNING CONFIGURATIONS
 #############################################
-# In case of an R turn, the tiles turn rotate this point
-PIVOT_POINT_R = (3 * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN // 2, 1 * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN // 2)
+ROTATION_ANIM_SPEED = 1.0    # base speed for rotation animations
+SMOOTH_MOVEMENT_SPEED = 3.0  # base speed for smooth movement animations
+SPEED_MIN_VALUE = 1.0/3.0    # minimum speed multiplier from the slider
+SPEED_MAX_VALUE = 3.0        # maximum speed multiplier from the slider
+
+# Pivot points are the centers of the 2x2 tile groups; one on the left, one on the right
+PIVOT_Y = 200
+PIVOT_L_X = WINDOW_WIDTH // 2 - 160
+PIVOT_R_X = WINDOW_WIDTH // 2 + 160
 # In case of an L turn, the tiles turn rotate this point
-PIVOT_POINT_L = (1 * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN // 2, 1 * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN // 2)
+PIVOT_POINT_L = (PIVOT_L_X, PIVOT_Y)
+# In case of an R turn, the tiles turn rotate this point
+PIVOT_POINT_R = (PIVOT_R_X, PIVOT_Y)
 # In case of an F or B turn, the tiles rotate around this point
-PIVOT_POINT_FB = (2 * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN // 2, 1 * (TILE_SIZE + TILE_MARGIN) + TILE_MARGIN // 2)
+PIVOT_POINT_FB = (WINDOW_WIDTH // 2, PIVOT_Y)
 
 CW_R_TURN_CONFIG = {"from": [(0, 2), (0, 3), (1, 3), (1, 2)], "to": [(0, 3), (1, 3), (1, 2), (0, 2)],
-                    "rotation_degree": 120/FPS, "target_angle_diff": 90, "pivot_point": PIVOT_POINT_R}
+                    "rotation_degree": 90, "target_angle_diff": 90, "pivot_point": PIVOT_POINT_R}
 CCW_R_TURN_CONFIG = {"from": [(0, 2), (0, 3), (1, 3), (1, 2)], "to": [(1, 2), (0, 2), (0, 3), (1, 3)],
-                     "rotation_degree": -120/FPS, "target_angle_diff": -90, "pivot_point": PIVOT_POINT_R}
+                     "rotation_degree": -90, "target_angle_diff": -90, "pivot_point": PIVOT_POINT_R}
 CW_L_TURN_CONFIG = {"from": [(0, 0), (0, 1), (1, 1), (1, 0)], "to": [(0, 1), (1, 1), (1, 0), (0, 0)],
-                    "rotation_degree": 120/FPS, "target_angle_diff": 90, "pivot_point": PIVOT_POINT_L}
+                    "rotation_degree": 90, "target_angle_diff": 90, "pivot_point": PIVOT_POINT_L}
 CCW_L_TURN_CONFIG = {"from": [(0, 0), (0, 1), (1, 1), (1, 0)], "to": [(1, 0), (0, 0), (0, 1), (1, 1)],
-                     "rotation_degree": -120/FPS, "target_angle_diff": -90, "pivot_point": PIVOT_POINT_L}
+                     "rotation_degree": -90, "target_angle_diff": -90, "pivot_point": PIVOT_POINT_L}
 U2_TURN_CONFIG = {"from": [(0, 0), (0, 1), (0, 2), (0, 3)], "to": [(0, 2), (0, 3), (0, 0), (0, 1)]}
 D2_TURN_CONFIG = {"from": [(1, 0), (1, 1), (1, 2), (1, 3)], "to": [(1, 2), (1, 3), (1, 0), (1, 1)]}
 F2_TURN_CONFIG = {"from": [(0, 1), (0, 2), (1, 2), (1, 1)], "to": [(1, 2), (1, 1), (0, 1), (0, 2)],
-                  "rotation_degree": 180/FPS, "target_angle_diff": 180, "pivot_point": PIVOT_POINT_FB}
+                  "rotation_degree": 180, "target_angle_diff": 180, "pivot_point": PIVOT_POINT_FB}
 B2_TURN_CONFIG = {"from": [(0, 0), (0, 3), (1, 3), (1, 0)], "to": [(1, 3), (1, 0), (0, 0), (0, 3)],
-                  "rotation_degree": 180/FPS, "target_angle_diff": 180, "pivot_point": PIVOT_POINT_FB}
+                  "rotation_degree": 180, "target_angle_diff": 180, "pivot_point": PIVOT_POINT_FB}
 YA_TURN_CONFIG = {"from": [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3)],
                   "to": [(0, 3), (0, 0), (0, 1), (0, 2), (1, 3), (1, 0), (1, 1), (1, 2)]}
 
@@ -75,7 +90,7 @@ YA_TURN_CONFIG = {"from": [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2
 MODEL_STICKER_ORIGIN_SIZE = (855, 664)  # The sticker coordinates were measured on a 855x664 image by hand
 MODEL_STICKER_TARGET_SIZE = (260, 200)  # This is the size we want to render the stickers at
 
-MODEL_3D_TOP_MARGIN = 400  # the 3D model is rendered horizontally centered, and vertically starting from this y position
+MODEL_3D_TOP_MARGIN = 380  # the 3D model is rendered horizontally centered, and vertically starting from this y position
 
 STICKER_POSITIONS = [[(20, 39),   (218, 17),  (306, 55),  (90, 81)],    # Ulb
                      [(567, 52),  (634, 14),  (839, 31),  (788, 73)],   # Ubr

@@ -1,6 +1,8 @@
 from constants import *
+
 from tile import Tile
 from button import Button
+from slider import Slider
 from model3d import Model3D
 
 import pygame
@@ -16,18 +18,19 @@ class Hedgehog2D:
         self.font = pygame.font.SysFont(None, 36)
 
         self.model3d = Model3D()
+        self.slider = Slider(SLIDER_X, SLIDER_Y, SLIDER_WIDTH, min_val=1, max_val=100, start_val=50)
 
         # load the tile images, rescale, and build the 2x4 grid
         tile_images = [pygame.image.load(f"tile_images/{i+1}.png").convert_alpha() for i in range(8)]
         tile_images = [pygame.transform.scale(img, (TILE_SIZE, TILE_SIZE)) for img in tile_images]
-        self.tiles = [Tile(tile_images[i], (i // COLS, i % COLS)) for i in range(8)]
+        self.tiles = [Tile(tile_images[i], (i // COLS, i % COLS), self.slider.value) for i in range(8)]
 
         self._init_buttons()
 
     def _init_buttons(self):
         """Prepare the buttons for user interaction. Position and size values are defined here instead of constants.py,
         as they are closely related to the main application layout."""
-        self.buttons = {}
+        self.buttons: dict[str, Button] = {}
         # First row buttons
         self.buttons["x"]  = Button(20+0*50, WINDOW_HEIGHT - 100, 40, 40, "x",  (10, 8), PURPLE_COLOR)
         self.buttons["xp"] = Button(20+1*50, WINDOW_HEIGHT - 100, 40, 40, "x'", (10, 8), PURPLE_COLOR)
@@ -78,18 +81,19 @@ class Hedgehog2D:
             tile.target_angle = 0
             tile.pivot_point = None
 
+    def _write_text_with_shadow(self, text, position):
+        shadow_text = self.font.render(text, True, BLACK_COLOR)
+        self.screen.blit(shadow_text, (position[0] + SHADOW_OFFSET, position[1] + SHADOW_OFFSET))
+        main_text = self.font.render(text, True, WHITE_COLOR)
+        self.screen.blit(main_text, position)
+
     def display(self) -> bool:
         """Main loop to run the Hedgehog application. Returns false if the application should quit."""
         dt = self.clock.tick(FPS) / 1000.0  # Delta time in seconds
 
         self.screen.fill(BACKGROUND_COLOR)
 
-        # write text with a shadow
-        shadow_text = self.font.render("2D Hedgehog v1.0", True, BLACK_COLOR)
-        self.screen.blit(shadow_text, (13, 13))
-        info_text = self.font.render("2D Hedgehog v1.0", True, WHITE_COLOR)
-        self.screen.blit(info_text, (10, 10))
-
+        # primitives rendering
         for tile in self.tiles:
             tile.update(dt)
             tile.draw(self.screen)
@@ -98,13 +102,23 @@ class Hedgehog2D:
             button.draw(self.screen, self.font)
 
         self.model3d.render(self.screen)
+        self.slider.draw(self.screen)
 
+        # event handling
         for event in pygame.event.get():
+            self.slider.handle_event(event)
+            for tile in self.tiles:
+                tile.update_speed(self.slider.value)
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self._handle_mouse_click(event)
+
+        # texts
+        self._write_text_with_shadow("2D Hedgehog v1.1", (10, 10))
+        self._write_text_with_shadow(f"Speed: {self.slider.value}", SLIDER_TEXT_POS)
 
         pygame.display.update()
         return True
